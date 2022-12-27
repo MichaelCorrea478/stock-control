@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,11 @@ Route::middleware(['auth'])->group(function() {
 
     Route::prefix('users')->group(function() {
         Route::get('/information', [UserController::class, 'getUserInformation'])->name('users.information');
+    });
+
+
+    Route::prefix('stocks')->group(function() {
+        Route::get('/index', [StockController::class, 'index'])->name('stocks.index');
     });
 });
 

@@ -5064,7 +5064,38 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
-window.axio;
+window.myModal = function () {
+  var modal = $('<div class="modal" id="my-modal" />');
+  var modal_dialog = $('<div class="modal-dialog modal-xl" />');
+  var modal_content = $('<div class="modal-content" />');
+  var modal_header = $('<div class="modal-header" />');
+  var dismiss_button = $('<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>');
+  var modal_body = $('<div class="modal-body" />');
+  var modal_footer = $('<div class="modal-footer" />');
+  var close_button = $('<buttom class="btn btn-sm btn-danger">Fechar</buttom>');
+  close_button.on('click', function () {
+    myModal.close();
+  });
+  dismiss_button.on('click', function () {
+    myModal.close();
+  });
+  modal_header.append(dismiss_button);
+  modal_footer.append(close_button);
+  modal_content.append(modal_header, modal_body, modal_footer);
+  modal_dialog.append(modal_content);
+  modal.append(modal_dialog);
+  modal.appendTo('body');
+  return {
+    open: function open(content) {
+      modal_body.empty().append(content);
+      modal.show();
+    },
+    close: function close() {
+      modal_body.empty();
+      modal.hide();
+    }
+  };
+}();
 
 /***/ }),
 

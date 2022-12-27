@@ -22,7 +22,6 @@
 
         <div class="row mx-1">
             <div class="card mb-2 col-sm-6 col-md-4 col-lg-3" data-symbol="AAPL">
-                <!-- Step 3: Use the Bootstrap 4 card component to display the stock information -->
                 <div class="card-header d-flex justify-content-between align-items-baseline pb-0">
                     <h3>Apple Inc.</h3>
                     <p class="symbol">AAPL</p>
