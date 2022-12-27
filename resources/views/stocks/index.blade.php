@@ -2,6 +2,8 @@
 
 @section('content')
 
+<div x-init="getAllStocks()" x-data="component">
+
     <div class="container-fluid bg-success my-4 p-3 shadow-md rounded">
         <h3>Lista de Papéis disponíveis</h3>
     </div>
@@ -24,6 +26,7 @@
         </div>
     </div>
 
+</div>
 
 @endsection
 
@@ -31,7 +34,11 @@
 <script>
 
     const component = {
+        stocks: [],
 
+        getAllStocks() {
+
+        },
     }
 </script>
 @endpush
