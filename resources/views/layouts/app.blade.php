@@ -11,6 +11,10 @@
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+
     @yield('third_party_stylesheets')
 
     @stack('page_css')
@@ -35,8 +39,7 @@
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <!-- Menu Footer-->
                     <li class="user-footer">
-                        <a href="#" class="btn btn-default btn-flat">Perfil</a>
-                        <a href="#" class="btn btn-default btn-flat float-right"
+                        <a href="#" class="btn btn-default btn-flat w-100"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Log Out
                         </a>
