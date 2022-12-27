@@ -14,7 +14,7 @@ class TransactionTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('transaction_types')->create([
+        DB::table('transaction_types')->insert([
                 [
                     'Description' => 'Depósito'
                 ],
