@@ -23,6 +23,8 @@
         "sass-loader": "^11.0.1"
     },
     "dependencies": {
-        "alpinejs": "^3.10.5"
+        "@popperjs/core": "^2.11.6",
+        "alpinejs": "^3.10.5",
+        "sweetalert2": "^11.6.16"
     }
 }

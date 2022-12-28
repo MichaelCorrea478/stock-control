@@ -14,16 +14,10 @@ class BrapiApi
         $this->baseUrl = config('stock.brapi.base_url');
     }
 
-
-    public static function __call($method, $arguments)
-    {
-        return (new self)->$method(implode(', ', $arguments));
-    }
-
-    private function get(array $arguments)
+    public function get(string $endpoint, array $arguments = [])
     {
         try {
-            $url = $this->baseUrl . '?' . http_build_query($arguments);
+            $url = $this->baseUrl . $endpoint . '?' . http_build_query($arguments);
             $response = (new Client())->get($url);
 
             if ($response->getStatusCode() != 200) {
@@ -38,7 +32,6 @@ class BrapiApi
 
             return json_decode($response->getBody());
         } catch (\Exception $e) {
-            report($e);
             return null;
         }
     }

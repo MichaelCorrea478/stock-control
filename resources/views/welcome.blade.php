@@ -6,6 +6,11 @@
 
         <title>Stock Control</title>
 
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+            integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+            crossorigin="anonymous"/>
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -20,11 +25,10 @@
         <style>
             body {
                 font-family: 'Nunito', sans-serif;
-                background-color: #e2d4d4;
             }
         </style>
     </head>
-    <body class="antialiased">
+    <body class="antialiased bg-light">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background: linear-gradient(to right, #00b8d4, #0052cc);">
@@ -50,13 +54,50 @@
     </nav>
 
     <!-- Jumbotron -->
-    <div class="jumbotron jumbotron-fluid text-white text-center mt-4"  style="background-image: url({{  asset('img/stocks.jpg') }}); background-size: cover; opacity: 0.9;">
+    <div class="jumbotron jumbotron-fluid text-white text-center mt-4 mb-0"  style="background-image: url({{  asset('img/stocks.jpg') }}); background-size: cover; opacity: 0.9;">
         <div class="container">
         <h1 class="display-4">Bem vindo a seu sistema de controle de Ações</h1>
         <p class="lead">Uma ferramenta para gerenciar sua carteira de ações e monitorar seu patrimônio.</p>
         <a href="{{ route('register') }}" class="btn btn-lg btn-light mt-4 shadow-md">Cadastre-se Agora</a>
         </div>
     </div>
+
+    <!-- Features -->
+    <section id="features" class="bg-light p-4">
+        <div class="container">
+            <h2 class="text-center mb-4">Funcionalidades do Sistema</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-center"><i class="fas fa-wallet text-primary"></i></h4>
+                        <h6 class="card-subtitle mb-2 text-muted text-center text-primary"><strong>Carteira</strong></h6>
+                        <p class="card-text">Veja o saldo da sua carteira e realize saques e depósitos.</p>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-center"><i class="fas fa-chart-line text-primary"></i></h4>
+                        <h6 class="card-subtitle mb-2 text-muted text-center text-primary"><strong>Mercado de Ações</strong></h6>
+                        <p class="card-text">Acompanhe as cotações, compre ou venda suas ações na bolsa de valores.</p>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-center"><i class="fas fa-hand-holding-usd text-primary"></i></h4>
+                        <h6 class="card-subtitle mb-2 text-muted text-center text-primary"><strong>Patrimônio</strong></h6>
+                        <p class="card-text">Acompanhe a evolução do seu patrimônio ao longo do tempo.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
 

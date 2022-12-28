@@ -1,13 +1,20 @@
+require('@popperjs/core')
+window.$ = require('jquery')
 require('./bootstrap');
 require('admin-lte');
 
 window.axios = require('axios')
 
+window.Swal = require('sweetalert2')
+
 import Alpine from 'alpinejs'
-
 window.Alpine = Alpine
-
 Alpine.start()
+
+$('.nav-link').on('click', function() {
+    $('.nav-link').removeClass('active');
+    $(this).addClass('active');
+});
 
 window.myModal = (function() {
     let modal = $('<div class="modal" id="my-modal" />');
