@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,15 +26,17 @@ Auth::routes();
 Route::middleware(['auth'])->group(function() {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-
     Route::prefix('users')->group(function() {
         Route::get('/information', [UserController::class, 'getUserInformation'])->name('users.information');
     });
 
-
     Route::prefix('stocks')->group(function() {
         Route::get('/index', [StockController::class, 'index'])->name('stocks.index');
         Route::get('/list', [StockController::class, 'list'])->name('stocks.list');
+    });
+
+    Route::prefix('wallets')->group(function() {
+        Route::post('/deposit', [WalletController::class, 'makeDeposit'])->name('wallets.deposit');
     });
 });
 

@@ -1,15 +1,15 @@
-require('@popperjs/core')
-window.$ = require('jquery')
+require('@popperjs/core');
+window.$ = require('jquery');
 require('./bootstrap');
 require('admin-lte');
 
-window.axios = require('axios')
+window.axios = require('axios');
 
-window.Swal = require('sweetalert2')
+window.Swal = require('sweetalert2');
 
-import Alpine from 'alpinejs'
-window.Alpine = Alpine
-Alpine.start()
+import Alpine from 'alpinejs';
+window.Alpine = Alpine;
+Alpine.start();
 
 $('.nav-link').on('click', function() {
     $('.nav-link').removeClass('active');
