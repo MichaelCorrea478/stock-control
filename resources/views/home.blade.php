@@ -8,7 +8,7 @@
                     <p class="mb-1">Meu saldo</p>
                     <h3 x-text="(wallet) ? 'R$ ' + parseFloat(wallet.balance).toFixed(2) : ' - '"> R$ 0,00</h3>
                     <button class="btn btn-sm btn-primary border-white shadow px-1 py-0 mr-1" x-on:click="makeDeposit()">Depositar</button>
-                    <button class="btn btn-sm btn-success border-white shadow px-1 py-0 mr-1">Sacar</button>
+                    <button class="btn btn-sm btn-success border-white shadow px-1 py-0 mr-1" x-on:click="makeWithdraw()">Sacar</button>
                 </div>
                 <div class="icon">
                     <i class="fas fa-wallet"></i>
@@ -65,7 +65,6 @@
                         },
                         allowOutsideClick: () => !Swal.isLoading()
                     }).then((result) => {
-                        console.log(result)
                         this.wallet = result.value.wallet
                         Swal.fire({
                             icon: 'success',
@@ -73,6 +72,52 @@
                             imageUrl: result.value.avatar_url
                         })
                 })
+            },
+            makeWithdraw() {
+                Swal.fire({
+                    title: 'Digite o valor para fazer o saque',
+                    input: 'number',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sacar',
+                    confirmButtonColor: '#28a745',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (value) => {
+                            return axios.post('{{ route("wallets.withdraw") }}', {
+                                token: this.token,
+                                value: value
+                            })
+                            .then((response) => {
+                                if (!response.data.success) {
+                                    throw new Error(response.statusText)
+                                }
+                                return response.data
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                `Erro na requisição: ${error}`
+                                )
+                            })
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                        if (result.value.success) {
+                            this.wallet = result.value.wallet
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Saque realizado com sucesso!',
+                                imageUrl: result.value.avatar_url
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title:'Houve um erro ao tentar realizar o saque'
+                            })
+                        }
+                    }).catch(error => {
+                        Swal.showValidationMessage(
+                        `Erro: ${error}`
+                        )
+                    })
             }
 
         }

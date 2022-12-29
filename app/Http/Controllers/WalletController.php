@@ -19,4 +19,17 @@ class WalletController extends Controller
             'wallet' => $wallet->refresh()
         ]);
     }
+
+    public function makeWithdraw(Request $request, WalletService $walletService)
+    {
+        $wallet = auth()->user()->wallet;
+        $result = $walletService->makeWithdraw(
+            $wallet,
+            $request->value
+        );
+        return response()->json([
+            'success' => $result,
+            'wallet' => $wallet->refresh()
+        ]);
+    }
 }

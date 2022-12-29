@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function() {
 
     Route::prefix('wallets')->group(function() {
         Route::post('/deposit', [WalletController::class, 'makeDeposit'])->name('wallets.deposit');
+        Route::post('/withdraw', [WalletController::class, 'makeWithdraw'])->name('wallets.withdraw');
     });
 });
 
