@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
+    public function getUserWallet()
+    {
+        return auth()->user()->wallet->toJson();
+    }
+
     public function makeDeposit(Request $request, WalletService $walletService)
     {
         $wallet = auth()->user()->wallet;

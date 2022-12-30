@@ -16,4 +16,12 @@ class StockController extends Controller
     {
         return $stockService->getStockList();
     }
+
+    public function buyStock(Request $request, StockService $stockService)
+    {
+        return $stockService->buyStock(
+            auth()->user(),
+            $request
+        );
+    }
 }

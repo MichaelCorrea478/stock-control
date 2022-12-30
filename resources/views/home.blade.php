@@ -69,7 +69,6 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Deposito realizado com sucesso!',
-                            imageUrl: result.value.avatar_url
                         })
                 })
             },
@@ -105,7 +104,6 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Saque realizado com sucesso!',
-                                imageUrl: result.value.avatar_url
                             })
                         } else {
                             Swal.fire({

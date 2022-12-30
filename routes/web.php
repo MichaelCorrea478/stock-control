@@ -33,9 +33,11 @@ Route::middleware(['auth'])->group(function() {
     Route::prefix('stocks')->group(function() {
         Route::get('/index', [StockController::class, 'index'])->name('stocks.index');
         Route::get('/list', [StockController::class, 'list'])->name('stocks.list');
+        Route::post('/buy', [StockController::class, 'buyStock'])->name('stocks.buy');
     });
 
     Route::prefix('wallets')->group(function() {
+        Route::get('/get', [WalletController::class, 'getUserWallet'])->name('wallets.get');
         Route::post('/deposit', [WalletController::class, 'makeDeposit'])->name('wallets.deposit');
         Route::post('/withdraw', [WalletController::class, 'makeWithdraw'])->name('wallets.withdraw');
     });

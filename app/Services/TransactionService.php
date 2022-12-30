@@ -23,4 +23,17 @@ class TransactionService
             'value' => $value
         ]);
     }
+
+    public function saveBuyStockTransaction(int $userId, $stock)
+    {
+        Transaction::create([
+            'user_id' => $userId,
+            'transaction_type_id' => 3,
+            'stock_symbol' => $stock->stock_symbol,
+            'quantity' => $stock->quantity,
+            'value' => $stock->value
+        ]);
+    }
+
+
 }

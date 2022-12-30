@@ -18,6 +18,8 @@
     @yield('third_party_stylesheets')
 
     @stack('page_css')
+
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
