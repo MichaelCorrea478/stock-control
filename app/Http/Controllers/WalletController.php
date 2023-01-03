@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MakeWithdrawRequest;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
 
@@ -25,12 +26,12 @@ class WalletController extends Controller
         ]);
     }
 
-    public function makeWithdraw(Request $request, WalletService $walletService)
+    public function makeWithdraw(MakeWithdrawRequest $request, WalletService $walletService)
     {
         $wallet = auth()->user()->wallet;
         $result = $walletService->makeWithdraw(
             $wallet,
-            $request->value
+            $request->safe()->only(['value'])['value']
         );
         return response()->json([
             'success' => $result,

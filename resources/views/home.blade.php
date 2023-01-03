@@ -85,20 +85,22 @@
                                 token: this.token,
                                 value: value
                             })
-                            .then((response) => {
-                                if (!response.data.success) {
-                                    throw new Error(response.statusText)
-                                }
-                                return response.data
-                            })
+                            .then((response) => response.data )
                             .catch(error => {
-                                Swal.showValidationMessage(
-                                `Erro na requisição: ${error}`
+                                if (error.response.status == 422) {
+                                    Swal.showValidationMessage(
+                                        ` ${error.response.data.errors.value[0]}`
+                                    )
+                                } else {
+                                    Swal.showValidationMessage(
+                                    `Erro na requisição: ${error.data}`
                                 )
+                                }
                             })
                         },
                         allowOutsideClick: () => !Swal.isLoading()
                     }).then((result) => {
+                        console.log(result);
                         if (result.value.success) {
                             this.wallet = result.value.wallet
                             Swal.fire({
@@ -113,7 +115,7 @@
                         }
                     }).catch(error => {
                         Swal.showValidationMessage(
-                        `Erro: ${error}`
+                            `Erro: ${error}`
                         )
                     })
             }
