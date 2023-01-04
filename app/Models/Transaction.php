@@ -31,6 +31,6 @@ class Transaction extends Model
 
     public function type()
     {
-        return $this->hasOne(Type::class);
+        return $this->hasOne(TransactionType::class, 'id', 'transaction_type_id');
     }
 }

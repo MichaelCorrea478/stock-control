@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MakeWithdrawRequest;
+use App\Http\Resources\TransactionResource;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
 
@@ -15,27 +16,31 @@ class WalletController extends Controller
 
     public function makeDeposit(Request $request, WalletService $walletService)
     {
-        $wallet = auth()->user()->wallet;
+        $user = auth()->user();
+        $wallet = $user->wallet;
         $result = $walletService->makeDeposit(
             $wallet,
             $request->value
         );
         return response()->json([
             'success' => $result,
-            'wallet' => $wallet->refresh()
+            'wallet' => $wallet->refresh(),
+            'transactions' => TransactionResource::collection($user->transactions)
         ]);
     }
 
     public function makeWithdraw(MakeWithdrawRequest $request, WalletService $walletService)
     {
-        $wallet = auth()->user()->wallet;
+        $user = auth()->user();
+        $wallet = $user->wallet;
         $result = $walletService->makeWithdraw(
             $wallet,
             $request->safe()->only(['value'])['value']
         );
         return response()->json([
             'success' => $result,
-            'wallet' => $wallet->refresh()
+            'wallet' => $wallet->refresh(),
+            'transactions' => TransactionResource::collection($user->transactions)
         ]);
     }
 }

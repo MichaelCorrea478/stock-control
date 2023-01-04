@@ -11,17 +11,22 @@
         </div>
 
         <div class="row">
-            <div class="col-12 d-flex justify-content-between py-2 px-4">
-                <button class="btn btn-sm btn-secondary"
-                        x-show="currentPage > 0"
-                        x-on:click="--currentPage, paginate()"><< Anterior</button>
-                <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Buscar" x-model="searchValue">
+            <div class="col-4 d-flex justify-content-start py-2 px-4">
+                <div class="input-group input-group-sm w-50">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Buscar" x-on:keyup.enter="filterStocks()" x-model="searchValue">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-default" x-on:click="filterStocks()">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
+                </div>
+            </div>
+            <div class="col-8 d-flex justify-content-between py-2 px-4">
+                <button class="btn btn-sm btn-secondary"
+                        x-show="currentPage > 0"
+                        x-on:click="--currentPage, paginate()"><< Anterior</button>
+                <div>
+                    Mostrando de <span x-text="start + 1"></span> a <span x-text="end"></span> de <span x-text="filteredStocks.length"></span> resultados
                 </div>
                 <button class="btn btn-sm btn-secondary"
                         x-show="currentPage < Math.ceil(filteredStocks.length / pageSize)"
@@ -29,9 +34,9 @@
             </div>
             <template x-for="stock in activeStocks" :key="">
                 <div class="card col-sm-12 col-md-6 col-lg-4 px-1 py-3">
-                    <div class="card-header row">
+                    <div class="card-header row border-0">
                         <div class="col-2 d-sm-block d-md-none d-lg-block">
-                            <img :src="stock.logo" class="rounded img-fluid" alt="Stock logo">
+                            <img :src="stock.logo" class="rounded img-fluid" alt="Stock logo" style="max-width: 56px;">
                         </div>
                         <div class="col-10">
                             <div class="d-flex justify-content-between mb-1">
@@ -136,6 +141,8 @@
         const component = {
             currentPage: 0,
             pageSize: 12,
+            start: 0,
+            end: this.pageSize,
             searchValue: '',
 
             token: '{{ csrf_token() }}',
@@ -152,9 +159,9 @@
             },
 
             paginate() {
-                let start = this.currentPage * this.pageSize
-                let end = start + this.pageSize
-                this.activeStocks = this.filteredStocks.slice(start, end)
+                this.start = this.currentPage * this.pageSize
+                this.end = this.start + this.pageSize
+                this.activeStocks = this.filteredStocks.slice(this.start, this.end)
             },
 
             filterStocks() {

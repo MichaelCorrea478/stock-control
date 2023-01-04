@@ -82,8 +82,8 @@
                             'text-success': ['1', '4'].includes(transaction.transaction_type_id),
                             'text-danger': ['2', '3'].includes(transaction.transaction_type_id)
                         }">
-                            <td x-text="transaction.created_at"></td>
-                            <td x-text="transaction.transaction_type_id"></td>
+                            <td x-text="transaction.date"></td>
+                            <td x-text="transaction.transaction_type"></td>
                             <td x-text="transaction.stock_symbol"></td>
                             <td x-text="transaction.quantity"></td>
                             <td x-text="'R$ ' + parseFloat(transaction.value).toFixed(2)"></td>
@@ -140,6 +140,7 @@
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
                     this.wallet = result.value.wallet
+                    this.transactions = result.value.transactions
                     Swal.fire({
                         icon: 'success',
                         title: 'Deposito realizado com sucesso!',
@@ -177,6 +178,7 @@
                     console.log(result);
                     if (result.value.success) {
                         this.wallet = result.value.wallet
+                        this.transactions = result.value.transactions
                         Swal.fire({
                             icon: 'success',
                             title: 'Saque realizado com sucesso!',
