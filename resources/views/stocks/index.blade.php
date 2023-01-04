@@ -11,7 +11,23 @@
         </div>
 
         <div class="row">
-            <template x-for="stock in stocks">
+            <div class="col-12 d-flex justify-content-between py-2 px-4">
+                <button class="btn btn-sm btn-secondary"
+                        x-show="currentPage > 0"
+                        x-on:click="--currentPage, paginate()"><< Anterior</button>
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Buscar" x-model="searchValue">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default" x-on:click="filterStocks()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-sm btn-secondary"
+                        x-show="currentPage < Math.ceil(filteredStocks.length / pageSize)"
+                        x-on:click="++currentPage, paginate()">Próxima >></button>
+            </div>
+            <template x-for="stock in activeStocks" :key="">
                 <div class="card col-sm-12 col-md-6 col-lg-4 px-1 py-3">
                     <div class="card-header row">
                         <div class="col-2 d-sm-block d-md-none d-lg-block">
@@ -118,9 +134,15 @@
 
     <script>
         const component = {
+            currentPage: 0,
+            pageSize: 12,
+            searchValue: '',
+
             token: '{{ csrf_token() }}',
             sendingBuyRequest: false,
             stocks: [],
+            filteredStocks: [],
+            activeStocks: [],
             wallet: {},
             modal: $('#modal-stock-info'),
             buy: {
@@ -129,11 +151,25 @@
                 value: 0
             },
 
+            paginate() {
+                let start = this.currentPage * this.pageSize
+                let end = start + this.pageSize
+                this.activeStocks = this.filteredStocks.slice(start, end)
+            },
+
+            filterStocks() {
+                this.filteredStocks = this.stocks.filter((stock) => stock.stock.indexOf(this.searchValue.toUpperCase()) > -1 || stock.name.indexOf(this.searchValue.toUpperCase()) > -1)
+                this.currentPage = 0
+                this.paginate()
+            },
+
             getAllStocks() {
                 axios.get('{{ route('stocks.list') }}')
                     .then((response) => {
                         if (response.data) {
                             this.stocks = response.data
+                            this.filteredStocks = response.data
+                            this.paginate()
                         }
                     })
             },
