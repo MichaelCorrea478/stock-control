@@ -16,7 +16,9 @@ class Stock extends Model
      */
     protected $fillable = [
         'user_id',
+        'logo',
         'symbol',
+        'sector',
         'quantity',
         'created_at',
         'updated_at'

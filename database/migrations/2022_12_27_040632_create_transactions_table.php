@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('transaction_type_id')->constrained('transactions');
+            $table->foreignId('transaction_type_id')->constrained('transaction_types');
             $table->string('stock_symbol')->nullable();
             $table->integer('quantity')->nullable();
             $table->decimal('value', 10, 2);

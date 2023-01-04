@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::prefix('users')->group(function() {
-        Route::get('/information', [UserController::class, 'getUserInformation'])->name('users.information');
+        Route::get('/information', [HomeController::class, 'getUserInformation'])->name('users.information');
     });
 
     Route::prefix('stocks')->group(function() {

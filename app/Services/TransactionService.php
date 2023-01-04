@@ -24,14 +24,14 @@ class TransactionService
         ]);
     }
 
-    public function saveBuyStockTransaction(int $userId, $stock)
+    public function saveBuyStockTransaction(int $userId, $request)
     {
         Transaction::create([
             'user_id' => $userId,
             'transaction_type_id' => 3,
-            'stock_symbol' => $stock->stock_symbol,
-            'quantity' => $stock->quantity,
-            'value' => $stock->value
+            'stock_symbol' => $request->stock['stock'],
+            'quantity' => $request->quantity,
+            'value' => $request->value
         ]);
     }
 

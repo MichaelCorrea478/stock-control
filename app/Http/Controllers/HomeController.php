@@ -25,4 +25,18 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function getUserInformation()
+    {
+        $user = auth()->user();
+        $wallet = $user->wallet;
+        $stocks = $user->stocks;
+        $transactions = $user->transactions;
+
+        return response()->json([
+            'wallet' => $wallet,
+            'stocks' => $stocks,
+            'transactions' => $transactions
+        ]);
+    }
 }

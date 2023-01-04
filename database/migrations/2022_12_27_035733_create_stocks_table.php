@@ -16,9 +16,12 @@ class CreateStocksTable extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('symbol')->unique();
+            $table->string('logo')->nullable();
+            $table->string('symbol');
+            $table->string('sector')->nullable();
             $table->integer('quantity', false, true);
             $table->timestamps();
+            $table->index(['user_id', 'symbol']);
         });
     }
 

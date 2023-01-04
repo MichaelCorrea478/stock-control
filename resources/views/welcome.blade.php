@@ -31,7 +31,7 @@
     <body class="antialiased bg-light">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background: linear-gradient(to right, #00b8d4, #0052cc);">
+    <nav class="navbar navbar-expand-lg fixed-top text-white bold border-bottom" style="background: linear-gradient(to right, #00b8d4, #0052cc);">
         <div class="container">
         <a class="navbar-brand" href="#">Stocks Control System</a>
         <button class="navbar-toggler" type="button" onclick="$('#navbarNav').toggle()" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

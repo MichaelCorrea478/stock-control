@@ -66,7 +66,7 @@
                                     <div class="col-sm-4 border-right">
                                         <div class="text-center text-success">
                                             <span class="description-text">Cotação</span>
-                                            <h4 class="mt-2" x-text="'R$ ' + buy.stock.close.toFixed(2)"></h4>
+                                            <h4 class="mt-2" x-text="(buy.stock.close) ? 'R$ ' + buy.stock.close.toFixed(2) : 'R$ -'"></h4>
                                         </div>
 
                                     </div>
@@ -100,8 +100,15 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" x-on:click="modal.hide()">Cancelar</button>
-                        <button type="button" class="btn btn-success" x-on:click="buyStock()"><i class="fas fa-shopping-cart"></i> Comprar</button>
+                        <div x-show="!sendingBuyRequest">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" x-on:click="modal.hide()">Cancelar</button>
+                            <button type="button" class="btn btn-success" x-on:click="buyStock()"><i class="fas fa-shopping-cart"></i> Comprar</button>
+                        </div>
+                        <div x-show="sendingBuyRequest">
+                            <div class="bg-light">
+                                <i class="fas fa-2x fa-sync-alt spin fa-spin"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -112,6 +119,7 @@
     <script>
         const component = {
             token: '{{ csrf_token() }}',
+            sendingBuyRequest: false,
             stocks: [],
             wallet: {},
             modal: $('#modal-stock-info'),
@@ -141,9 +149,11 @@
                     this.buy.error = 'Saldo insuficiente!'
                     return
                 }
+                this.sendingBuyRequest = true
                 axios.post('{{ route("stocks.buy") }}', {
                     token: this.token,
                     stock_symbol: this.buy.stock.stock,
+                    stock: this.buy.stock,
                     quantity: this.buy.quantity,
                     value: this.buy.value
                 }).then((response) => {
@@ -152,6 +162,7 @@
                             icon: 'success',
                             title: 'Compra realizada com sucesso!',
                         })
+                        this.modal.hide()
                         this.buy.stock = {}
                         this.buy.quantity = 0
                         this.buy.error = null
@@ -161,7 +172,7 @@
                             title:'Houve um erro ao tentar realizar a compra'
                         })
                     }
-                })
+                }).then(() => this.sendingBuyRequest = false)
             }
         }
     </script>
