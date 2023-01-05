@@ -74,12 +74,12 @@
                         </div>
                         <div class="card card-widget widget-user">
 
-                            <div class="widget-user-header bg-info">
+                            <div class="widget-user-header bg-info" style="height: 160px;">
                                 <h3 class="widget-user-username" x-text="buy.stock.stock"></h3>
                                 <h5 class="widget-user-desc" x-text="buy.stock.name"></h5>
                                 <h5 class="widget-user-desc" x-text="buy.stock.sector"></h5>
                             </div>
-                            <div class="widget-user-image">
+                            <div class="widget-user-image" style="top: 110px;">
                                 <img class="img-circle elevation-2" :src="buy.stock.logo" alt="Stock Logo">
                             </div>
                             <div class="card-footer">

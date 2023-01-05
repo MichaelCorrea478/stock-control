@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Stock;
+use App\Models\User;
 use App\Repositories\BrapiApiRepository;
 use App\Repositories\StockRepository;
 use App\Repositories\WalletRepository;
@@ -49,6 +50,11 @@ class StockService
             report($e);
             return false;
         }
+    }
 
+    public function getCurrentStockPrices(User $user)
+    {
+        $stockSymbols = $this->stockRepository->getUserStockSymbols($user->id);
+        return $this->brapiApiRepository->getCurrentStockPrices($stockSymbols);
     }
 }

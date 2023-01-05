@@ -16,4 +16,10 @@ class BrapiApiRepository
             return false;
         }
     }
+
+    public function getCurrentStockPrices(string $stockSymbols)
+    {
+        $response = (new BrapiApi)->get('/quote/' . $stockSymbols);
+        return $response->results;
+    }
 }

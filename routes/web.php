@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function() {
     Route::prefix('stocks')->group(function() {
         Route::get('/index', [StockController::class, 'index'])->name('stocks.index');
         Route::get('/list', [StockController::class, 'list'])->name('stocks.list');
+        Route::get('/current_prices', [StockController::class, 'getCurrentPrices'])->name('stocks.current_prices');
         Route::post('/buy', [StockController::class, 'buyStock'])->name('stocks.buy');
     });
 

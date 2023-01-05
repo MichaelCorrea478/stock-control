@@ -29,7 +29,7 @@ class TransactionResource extends JsonResource
             'transaction_type' => $this->type->description,
             'quantity' => $this->quantity,
             'value' => $this->value,
-            'date' => Carbon::parse($this->created_at)->locale('pt')->format('j \d\e F, Y g:i\h'),
+            'date' => Carbon::parse($this->created_at)->locale('pt_BR')->format('j \d\e F, Y g:i\h'),
         ];
     }
 }

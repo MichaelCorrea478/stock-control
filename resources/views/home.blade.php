@@ -6,7 +6,7 @@
             <div class="small-box m-2 p-0 bg-success col-sm-12 col-md-6 col-lg-4">
                 <div class="inner">
                     <p class="mb-1">Meu saldo</p>
-                    <h3 x-text="(wallet) ? 'R$ ' + parseFloat(wallet.balance).toFixed(2) : ' - '"> R$ 0,00</h3>
+                    <h3 x-text="(wallet) ? moneyFormat(wallet.balance) : ' - '"> R$ 0,00</h3>
                     <button class="btn btn-sm btn-primary border-white shadow px-1 py-0 mr-1"
                         x-on:click="makeDeposit()">Depositar</button>
                     <button class="btn btn-sm btn-success border-white shadow px-1 py-0 mr-1"
@@ -23,7 +23,7 @@
             <div class="small-box m-2 p-0 bg-primary col-sm-12 col-md-6 col-lg-4">
                 <div class="inner">
                     <p class="mb-1">Meu patrimônio</p>
-                    <h3> R$ 0,00</h3>
+                    <h3 x-text="moneyFormat(patrimony)"></h3>
                 </div>
                 <div class="icon">
                     <i class="fas fa-piggy-bank"></i>
@@ -56,8 +56,8 @@
                             <td class="align-middle" x-text="stock.symbol"></td>
                             <td class="align-middle" x-text="stock.sector"></td>
                             <td class="align-middle" x-text="stock.quantity"></td>
-                            <td class="align-middle">R$</td>
-                            <td class="align-middle">R$</td>
+                            <td class="align-middle" x-text="moneyFormat(stock.current_price)"></td>
+                            <td class="align-middle" x-text="moneyFormat(stock.total)"></td>
                         </tr>
                     </template>
                 </tbody>
@@ -86,7 +86,7 @@
                             <td x-text="transaction.transaction_type"></td>
                             <td x-text="transaction.stock_symbol"></td>
                             <td x-text="transaction.quantity"></td>
-                            <td x-text="'R$ ' + parseFloat(transaction.value).toFixed(2)"></td>
+                            <td x-text="moneyFormat(transaction.value)"></td>
                         </tr>
                     </template>
                 </tbody>
@@ -100,6 +100,7 @@
         const component = {
             token: '{{ csrf_token() }}',
             show: 'stocks',
+            patrimony: 0,
             wallet: null,
             stocks: [],
             transactions: [],
@@ -110,6 +111,23 @@
                         this.wallet = response.data.wallet
                         this.stocks = response.data.stocks
                         this.transactions = response.data.transactions
+                    }).then(() => {
+                        this.getStockPrices()
+                        setInterval(() => {
+                            this.getStockPrices()
+                        }, 120000);
+                    })
+            },
+            getStockPrices() {
+                axios.get('{{ route("stocks.current_prices") }}')
+                    .then((response) => {
+                        this.stocks.forEach((stock) => {
+                            let current = response.data.find((st) => st.symbol == stock.symbol)
+                            stock.current_price = current.regularMarketPrice
+                            stock.total = stock.current_price * stock.quantity
+                        })
+                    }).then(() => {
+                        this.patrimony = this.stocks.reduce((sum, stock) => sum + stock.total, 0)
                     })
             },
             makeDeposit() {
@@ -194,6 +212,12 @@
                         `Erro: ${error}`
                     )
                 })
+            },
+            moneyFormat(value) {
+                return parseFloat(value).toLocaleString('pt-BR', {
+                                            style: 'currency',
+                                            currency: 'BRL'
+                                        })
             }
 
         }

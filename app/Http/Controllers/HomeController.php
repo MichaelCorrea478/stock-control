@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StockResource;
 use App\Http\Resources\TransactionResource;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,7 @@ class HomeController extends Controller
 
         return response()->json([
             'wallet' => $wallet,
-            'stocks' => $stocks,
+            'stocks' => StockResource::collection($stocks),
             'transactions' => TransactionResource::collection($transactions)
         ]);
     }

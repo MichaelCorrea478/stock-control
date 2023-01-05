@@ -25,4 +25,9 @@ class StockRepository
             ]);
         }
     }
+
+    public function getUserStockSymbols(int $userId)
+    {
+        return Stock::where('user_id', $userId)->pluck('symbol')->implode(',');
+    }
 }

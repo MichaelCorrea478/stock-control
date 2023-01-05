@@ -2,10 +2,16 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Stock;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StockResource extends JsonResource
 {
+    public function __construct(Stock $model)
+    {
+        parent::__construct($model);
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -14,6 +20,14 @@ class StockResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'logo' => $this->logo,
+            'symbol' => $this->symbol,
+            'sector' => $this->sector,
+            'quantity' => $this->quantity,
+            'current_price' => 0,
+            'total' => 0
+        ];
     }
 }
