@@ -36,4 +36,9 @@ class StockController extends Controller
     {
         return $this->stockService->getCurrentStockPrices(auth()->user());
     }
+
+    public function sellStock(Request $request)
+    {
+        # code...
+    }
 }

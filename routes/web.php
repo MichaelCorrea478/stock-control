@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/list', [StockController::class, 'list'])->name('stocks.list');
         Route::get('/current_prices', [StockController::class, 'getCurrentPrices'])->name('stocks.current_prices');
         Route::post('/buy', [StockController::class, 'buyStock'])->name('stocks.buy');
+        Route::post('/sell', [StockController::class, 'sellStock'])->name('stocks.sell');
     });
 
     Route::prefix('wallets')->group(function() {

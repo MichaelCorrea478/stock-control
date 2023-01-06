@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid" x-cloak x-init="getUserInformation()" x-data="component">
+    <div class="container-fluid" x-cloak
+                                x-init="getUserInformation(),
+                                        $watch('sell.quantity', qty => sell.value = sell.stock.current_price * qty)"
+                                x-data="component">
         <div class="row">
             <div class="small-box m-2 p-0 bg-success col-sm-12 col-md-6 col-lg-4">
                 <div class="inner">
@@ -47,6 +50,7 @@
                         <th>Quantidade</th>
                         <th>Preço atual</th>
                         <th>Total</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,6 +62,9 @@
                             <td class="align-middle" x-text="stock.quantity"></td>
                             <td class="align-middle" x-text="moneyFormat(stock.current_price)"></td>
                             <td class="align-middle" x-text="moneyFormat(stock.total)"></td>
+                            <td class="align-middle">
+                                <button class="btn btn-sm btn-primary" x-on:click="openSellForm(stock)">Vender</button>
+                            </td>
                         </tr>
                     </template>
                 </tbody>
@@ -93,6 +100,85 @@
             </table>
         </div>
 
+        <div class="modal" tabindex="-1" id="modal-stock-info">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Vender Ativo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" x-on:click="modal.hide()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="info-box mb-3 bg-success">
+                            <span class="info-box-icon"><i class="fas fa-wallet"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Quantidade na carteira</span>
+                                <h4 class="info-box-number" x-text="sell.stock.quantity"></h4>
+                            </div>
+                        </div>
+                        <div class="card card-widget widget-user">
+
+                            <div class="widget-user-header bg-info">
+                                <h3 class="widget-user-username" x-text="sell.stock.symbol"></h3>
+                                <h5 class="widget-user-desc" x-text="sell.stock.sector"></h5>
+                            </div>
+                            <div class="widget-user-image">
+                                <img class="img-circle elevation-2" :src="sell.stock.logo" alt="Stock Logo">
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-sm-4 border-right">
+                                        <div class="text-center text-success">
+                                            <span class="description-text">Cotação</span>
+                                            <h4 class="mt-2" x-text="(sell.stock.current_price) ? moneyFormat(sell.stock.current_price) : 'R$ -'"></h4>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-4 border-right">
+                                        <div class="text-center">
+                                            <span class="description-text text-primary">Quantidade</span>
+                                            <div class="input-group mt-1">
+                                                <input type="number" min="0" name="quantity" class="form-control" x-model="sell.quantity">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="text-center text-success">
+                                            <span class="description-text">Preço</span>
+                                            <h4 class="description-header text-success" x-text="moneyFormat(sell.value)"></h4>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="alert alert-warning alert-dismissible mt-3" role="alert" x-show="sell.error != null">
+                                    <strong x-text="sell.error"></strong>
+                                    <button type="button" class="close" aria-label="Close" x-on:click="sell.error = null">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div x-show="!sendingSellRequest">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" x-on:click="modal.hide()">Cancelar</button>
+                            <button type="button" class="btn btn-success" x-on:click="sellStock()"><i class="fas fa-shopping-cart"></i> Vender</button>
+                        </div>
+                        <div x-show="sendingSellRequest">
+                            <div class="bg-light">
+                                <i class="fas fa-2x fa-sync-alt spin fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
@@ -104,6 +190,13 @@
             wallet: null,
             stocks: [],
             transactions: [],
+            modal: $('#modal-stock-info'),
+            sendingSellRequest: false,
+            sell: {
+                stock: {},
+                quantity: 0,
+                value: 0
+            },
 
             async getUserInformation() {
                 await axios.get('{{ route('users.information') }}')
@@ -218,6 +311,50 @@
                                             style: 'currency',
                                             currency: 'BRL'
                                         })
+            },
+            openSellForm(stock) {
+                this.sell.stock = stock
+                this.sell.quantity = 0
+                this.modal.show()
+            },
+            sellStock() {
+                if (this.sell.quantity > this.sell.stock.quantity) {
+                    this.sell.error = 'Quantidade insuficiente em carteira!'
+                    return
+                }
+                this.sendingSellRequest = true
+                axios.post('{{ route("stocks.sell") }}', {
+                    token: this.token,
+                    stock_symbol: this.sell.stock.symbol,
+                    stock: this.sell.stock,
+                    quantity: this.sell.quantity,
+                    value: this.sell.value
+                }).then((response) => {
+                    if (response.data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Venda realizada com sucesso!',
+                        })
+                        this.modal.hide()
+                        this.sell.stock = {}
+                        this.sell.quantity = 0
+                        this.sell.error = null
+                        this.wallet = response.data.wallet
+                        this.updateStock(response.data.stock)
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title:'Houve um erro ao tentar realizar a venda'
+                        })
+                    }
+                }).then(() => this.sendingSellRequest = false)
+            },
+            updateStock(newStock) {
+                this.stocks.forEach((stock, index) => {
+                    if (stock.symbol == newStock.symbol) {
+                        this.stocks[index] = newStock
+                    }
+                })
             }
 
         }
